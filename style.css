@@ -10,7 +10,8 @@ body{
 div.wrapper{
 	width: 540pt; /* 11pt * (cols) * 0.6203 + 1 = 540pt */
 	margin: 0px auto;
-	padding: 100px;
+	padding: 50px;
+	padding-top: 30px;
 	overflow: hidden;
 }
 
@@ -18,12 +19,12 @@ div.title{
 	width: 100%;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 12pt;
-	text-align:center;
+	text-align: center;
 }
 
-canvas.tty{
+div.tty{
 	width: 540pt; /* 11pt * (cols) * 0.6203 + 1 = 540pt */
-	height: 324pt; /* 14pt * (rows - 1) + 2pt */
+	/*height: 324pt; /* 14pt * (rows - 1) + 2pt */
 	background-color: #000000;
 	/* line-height: 14pt; /* Remove this line for FireFox */
 	box-shadow: 0px 0px 50px 20px rgba(0,0,0,0.5);
