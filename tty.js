@@ -7,6 +7,8 @@ $( document ).ready(function()
 		cols: 80,
 		rows: 24
 	})
+	
+	term.open(document.getElementById("tty"))
 
 	term.on('data', function(data) {
 		ws.send(data)
@@ -16,12 +18,10 @@ $( document ).ready(function()
 		document.title = title;
 		document.getElementById("title").innerHTML = title
 	})
-
-	term.open(document.getElementById("tty"));
 	
 	ws.onopen = function()
 	{
-		term.write('\x1b[32mgained connection\x1b[m\r\n');
+		term.write('\x1b[32mgained connection\x1b[m\r\n')
 	}
 	ws.onmessage = function(event)
 	{

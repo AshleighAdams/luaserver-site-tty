@@ -389,12 +389,14 @@ Terminal.defaults = {
   termName: 'xterm',
   geometry: [80, 24],
   cursorBlink: true,
+  blinkSpeed: 1250 / 2,
   visualBell: false,
   popOnBell: false,
   scrollback: 1000,
   screenKeys: false,
   debug: false,
-  useStyle: false
+  useStyle: false,
+  useCursorStyle: true,
   // programFeatures: false,
   // focusKeys: false,
 };
@@ -474,8 +476,8 @@ Terminal.prototype.initGlobal = function() {
     Terminal.fixIpad(document);
   }
 
-  if (this.useStyle) {
-    Terminal.insertStyle(document, this.colors[256], this.colors[257]);
+  if (this.useStyle || this.useCursorStyle) {
+    Terminal.insertStyle(document, this.colors[256], this.colors[257], this.useCursorStyle);
   }
 };
 
@@ -628,7 +630,7 @@ Terminal.fixIpad = function(document) {
  * Insert a default style
  */
 
-Terminal.insertStyle = function(document, bg, fg) {
+Terminal.insertStyle = function(document, bg, fg, onlycursor) {
   var style = document.getElementById('term-style');
   if (style) return;
 
@@ -639,21 +641,31 @@ Terminal.insertStyle = function(document, bg, fg) {
   style.id = 'term-style';
 
   // textContent doesn't work well with IE for <style> elements.
-  style.innerHTML = ''
-    + '.terminal {\n'
-    + '  float: left;\n'
-    + '  border: ' + bg + ' solid 5px;\n'
-    + '  font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;\n'
-    + '  font-size: 11px;\n'
-    + '  color: ' + fg + ';\n'
-    + '  background: ' + bg + ';\n'
-    + '}\n'
-    + '\n'
-    + '.terminal-cursor {\n'
-    + '  color: ' + bg + ';\n'
-    + '  background: ' + fg + ';\n'
-    + '}\n';
-
+  if(onlycursor)
+  {
+     style.innerHTML = ''
+		+ '.terminal-cursor {\n'
+		+ '  color: ' + bg + ';\n'
+		+ '  background: ' + fg + ';\n'
+		+ '}\n';
+  }
+  else
+  {
+	  style.innerHTML = ''
+		+ '.terminal {\n'
+		+ '  float: left;\n'
+		+ '  border: ' + bg + ' solid 5px;\n'
+		+ '  font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;\n'
+		+ '  font-size: 11px;\n'
+		+ '  color: ' + fg + ';\n'
+		+ '  background: ' + bg + ';\n'
+		+ '}\n'
+		+ '\n'
+		+ '.terminal-cursor {\n'
+		+ '  color: ' + bg + ';\n'
+		+ '  background: ' + fg + ';\n'
+		+ '}\n';
+  }
   // var out = '';
   // each(Terminal.colors, function(color, i) {
   //   if (i === 256) {
@@ -1216,6 +1228,7 @@ Terminal.prototype.refresh = function(start, end) {
         }
         if (data !== this.defAttr) {
           if (data === -1) {
+          	console.log("TERM")
             out += '<span class="reverse-video terminal-cursor">';
           } else {
             out += '<span style="';
@@ -1340,13 +1353,13 @@ Terminal.prototype.startBlink = function() {
   this._blinker = function() {
     self._cursorBlink();
   };
-  this._blink = setInterval(this._blinker, 500);
+  this._blink = setInterval(this._blinker, this.blinkSpeed);
 };
 
 Terminal.prototype.refreshBlink = function() {
   if (!this.cursorBlink) return;
   clearInterval(this._blink);
-  this._blink = setInterval(this._blinker, 500);
+  this._blink = setInterval(this._blinker, this.blinkSpeed);
 };
 
 Terminal.prototype.scroll = function() {
