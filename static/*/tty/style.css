@@ -11,7 +11,7 @@ div.wrapper{
 	width: 540pt; /* 11pt * (cols) * 0.6203 + 1 = 540pt */
 	margin: 0px auto;
 	padding: 50px;
-	padding-top: 30px;
+	padding-top: 50px;
 	overflow: hidden;
 }
 

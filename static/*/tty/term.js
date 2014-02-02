@@ -1228,7 +1228,6 @@ Terminal.prototype.refresh = function(start, end) {
         }
         if (data !== this.defAttr) {
           if (data === -1) {
-          	console.log("TERM")
             out += '<span class="reverse-video terminal-cursor">';
           } else {
             out += '<span style="';
