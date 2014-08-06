@@ -1790,6 +1790,13 @@ Terminal.prototype.write = function(data) {
             case 5:
               // change dynamic colors
               {
+                  if(Terminal.original_colours == null) // save a copy of the colours for resetting later...
+                  {
+                    Terminal.original_colours = []
+                    for(var i = 0; i < Terminal.colors.length; i++)
+                    	Terminal.original_colours[i] = Terminal.colors[i];
+                  }
+                  
                   var split = this.params[1].split(";");
 		          var colourid = Number(split[0]);
 		          var colour = split[1];
@@ -1820,6 +1827,7 @@ Terminal.prototype.write = function(data) {
             case 52:
               // manipulate selection data
               break;
+            
             case 104:
             case 105:
             case 110:
@@ -2958,6 +2966,9 @@ Terminal.prototype.reset = function() {
   this.options.rows = this.rows;
   this.options.cols = this.cols;
   Terminal.call(this, this.options);
+  if(Terminal.original_colours != null)
+    for(var i = 0; i < Terminal.original_colours.length; i++)
+      Terminal.colors[i] = Terminal.original_colours[i];
   this.refresh(0, this.rows - 1);
 };
 
