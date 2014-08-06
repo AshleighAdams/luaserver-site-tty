@@ -14,7 +14,13 @@ $( document ).ready(function()
 	term.open(document.getElementById("tty"))
 
 	term.on('data', function(data) {
-		ws.send(data)
+		try
+		{
+			ws.send(data)
+		}
+		catch(err)
+		{
+		}
 	})
 
 	term.on('title', function(title) {

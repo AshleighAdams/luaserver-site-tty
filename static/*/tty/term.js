@@ -1789,6 +1789,12 @@ Terminal.prototype.write = function(data) {
             case 4:
             case 5:
               // change dynamic colors
+              {
+                  var split = this.params[1].split(";");
+		          var colourid = Number(split[0]);
+		          var colour = split[1];
+		          Terminal.colors[colourid] = colour;
+              }
               break;
             case 10:
             case 11:
