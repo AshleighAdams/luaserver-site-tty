@@ -1,3 +1,4 @@
+local tags = require("luaserver.tags")
 
 local template = tags.html
 {
