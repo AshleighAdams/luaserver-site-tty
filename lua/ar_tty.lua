@@ -1,5 +1,12 @@
-local template = include("template.lua")
+
+local hosts = require("luaserver.hosts")
+local websocket = require("luaserver.websocket")
+local scheduler = require("luaserver.scheduler")
+
 local pty = require("pty")
+local base64 = require("base64")
+
+local template = include("template.lua")
 
 local validips = {}
 
@@ -24,8 +31,9 @@ local function tty_task()
 	local last = util.time()
 	while true do
 		if tty:canread() then
-			local payload = tty:read(tty:pending()) --base64.encode(
-			socket:send(payload)
+			local payload = tty:read(tty:pending())
+			--socket:send(payload)
+			socket:send(base64.encode(payload))
 			last = util.time()
 		end
 		
@@ -43,4 +51,4 @@ local function index(req, res)
 	
 	template.make(res)
 end
-reqs.AddPattern("*", "/tty/", index)
+hosts.any:add("/tty/", index)
