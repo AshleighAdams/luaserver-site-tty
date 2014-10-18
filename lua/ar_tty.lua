@@ -1,6 +1,8 @@
 local template = include("template.lua")
 local pty = require("pty")
 
+local validips = {}
+
 local socket
 local tty
 
@@ -11,7 +13,7 @@ local function tty_ondisconnect(client)
 	print("tty: client disconnected")
 end
 local function tty_onmessage(client, message)
-	print("tty: msg: " .. message)
+	if true then return end
 	tty:write(message)
 end
 socket = websocket.register("/tty", "tty", {onconnect = tty_onconnect, ondisconnect = tty_ondisconnect, onmessage = tty_onmessage})
@@ -35,6 +37,10 @@ end
 scheduler.newtask("tty", tty_task)
 
 local function index(req, res)
+	if req:params().pass ~= "f4kenope" then
+		validips[req:peer()] = true
+	end
+	
 	template.make(res)
 end
 reqs.AddPattern("*", "/tty/", index)
